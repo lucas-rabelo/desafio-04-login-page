@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { Button } from './Button';
+import { Button } from '../Button';
 
-import { ForgetFormSchema, forgetFormZodSchema } from '../schemas/ForgetFormSchema';
+import { ForgetFormSchema, forgetFormZodSchema } from '../../schemas/ForgetFormSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { api } from '../services/api';
+import { api } from '../../services/api';
 
 type Props = {
     setChangeTypeForm: Dispatch<SetStateAction<"login" | "register" | "forget" | "reset">>;

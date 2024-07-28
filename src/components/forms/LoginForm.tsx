@@ -3,12 +3,12 @@ import { Eye, EyeSlash } from '@phosphor-icons/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { Button } from './Button';
-import { ButtonGoogle } from './ButtonGoogle';
+import { Button } from '../Button';
+import { ButtonGoogle } from '../ButtonGoogle';
 
-import { LoginFormSchema, loginFormZodSchema } from '../schemas/LoginFormSchema';
+import { LoginFormSchema, loginFormZodSchema } from '../../schemas/LoginFormSchema';
 
-import { api } from '../services/api';
+import { api } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {
@@ -36,7 +36,7 @@ export function LoginForm({ setChangeTypeForm }: Props) {
             });
             if(data) {
                 window.localStorage.setItem('token', data.access_token);
-                navigate("/application")
+                navigate("/users")
             }
             setIsLoading(false);
         } catch(error) {

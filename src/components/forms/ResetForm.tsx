@@ -2,11 +2,11 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Eye, EyeSlash } from '@phosphor-icons/react'
 
-import { Button } from './Button';
+import { Button } from '../Button';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ResetFormSchema, resetFormZodSchema } from '../schemas/ResetFormSchema';
-import { api } from '../services/api';
+import { ResetFormSchema, resetFormZodSchema } from '../../schemas/ResetFormSchema';
+import { api } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {

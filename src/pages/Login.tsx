@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { Hero } from "../components/Hero";
+import { Hero } from "../components/layout/Hero";
 
-import { LoginForm } from "../components/LoginForm";
-import { RegisterForm } from "../components/RegisterForm";
-import { ForgetForm } from "../components/ForgetForm";
-import { ResetForm } from "../components/ResetForm";
+import { LoginForm } from "../components/forms/LoginForm";
+import { RegisterForm } from "../components/forms/RegisterForm";
+import { ForgetForm } from "../components/forms/ForgetForm";
+import { ResetForm } from "../components/forms/ResetForm";
 
 type Params = {
     token?: string;

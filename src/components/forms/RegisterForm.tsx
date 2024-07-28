@@ -4,12 +4,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-import { Button } from './Button';
-import { ButtonGoogle } from './ButtonGoogle';
+import { Button } from '../Button';
+import { ButtonGoogle } from '../ButtonGoogle';
 
-import { RegisterFormSchema, registerFormZodSchema } from '../schemas/RegisterFormSchema';
+import { RegisterFormSchema, registerFormZodSchema } from '../../schemas/RegisterFormSchema';
 
-import { api } from '../services/api';
+import { api } from '../../services/api';
 
 type Props = {
     setChangeTypeForm: Dispatch<SetStateAction<"login" | "register" | "forget" | "reset">>;

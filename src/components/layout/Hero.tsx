@@ -1,4 +1,4 @@
-import HeroSvg from '../assets/hero.svg';
+import HeroSvg from '../../assets/hero.svg';
 
 export function Hero() {
     return(

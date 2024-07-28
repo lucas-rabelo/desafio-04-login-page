@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { Login } from "../pages/Login";
-import { Application } from "../pages/Application";
+import { Users } from "../pages/Users"
 
 export function AppRoutes() {
     return(
@@ -9,7 +9,7 @@ export function AppRoutes() {
             <Routes>
                 <Route path="/" element={<Login />}   />
                 <Route path="/reset_password/:token" element={<Login />}  />
-                <Route path="/application" element={<Application />}  />
+                <Route path="/users" element={<Users />}  />
             </Routes>
         </BrowserRouter>
     );
