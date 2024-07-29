@@ -10,6 +10,7 @@ import { Drawer } from "../components/Drawer";
 import { UserForm } from "../components/forms/UserForm";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "../services/query-client";
+import { Unauthorized } from "../components/layout/Unauthorized";
 
 export function Users() {
     const token = window.localStorage.getItem("token");
@@ -17,7 +18,7 @@ export function Users() {
     const [drawerState, setDrawerState] = useState<boolean>(false);
     const [userSelected, setUserSelect] = useState<string>("");
 
-    const { data: users } = useQuery({ 
+    const { data: users, status } = useQuery({ 
         queryKey: ['users'], 
         queryFn: async () => await listUser(token),
         enabled: !!token 
@@ -57,14 +58,20 @@ export function Users() {
     return(
         <div className="flex flex-1 flex-col w-full h-auto bg-green-100">
             <Header />
-            <Content>
-                {users && <UserList 
-                    data={users} 
-                    onDelete={deleteUserByUuid}
-                    onEdit={editUserByUuid}
-                    onCreateNew={() => setDrawerState(true)}
-                />}
-            </Content>
+            {status === 'success' ? 
+                <Content>
+                    {users && <UserList 
+                        data={users} 
+                        onDelete={deleteUserByUuid}
+                        onEdit={editUserByUuid}
+                        onCreateNew={() => setDrawerState(true)}
+                    />}
+                </Content>
+                :
+                <Content>
+                    <Unauthorized />
+                </Content>
+            }
             <Footer />
 
             <Drawer 
