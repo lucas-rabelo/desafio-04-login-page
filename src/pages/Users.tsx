@@ -1,63 +1,82 @@
 import { useEffect, useState } from "react";
 
-// import { ArrowLeft } from "@phosphor-icons/react";
-// import { useNavigate } from "react-router-dom";
 import { Header } from "../components/layout/Header";
 import { Content } from "../components/layout/Content";
 import { Footer } from "../components/layout/Footer";
 import { UserList } from "../components/tables/UserList";
 
 import { deleteUser, listUser } from "../services/user.service";
+import { Drawer } from "../components/Drawer";
+import { UserForm } from "../components/forms/UserForm";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { queryClient } from "../services/query-client";
 
 export function Users() {
     const token = window.localStorage.getItem("token");
-    const [data, setData] = useState<User[]>([]);
 
-    async function getUsers(token: string) {
-        const data = await listUser(token);
-        if(data) {
-            setData(data);
-        }
-    }
+    const [drawerState, setDrawerState] = useState<boolean>(false);
+    const [userSelected, setUserSelect] = useState<string>("");
+
+    const { data: users } = useQuery({ 
+        queryKey: ['users'], 
+        queryFn: async () => await listUser(token),
+        enabled: !!token 
+    });
+
+    const { mutate: deleteUserMutateFn } = useMutation({
+        mutationFn: async (uuid: string) => await deleteUser(uuid),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['users'] });
+        },
+    })
 
     async function deleteUserByUuid(uuid: string) {
-        const data = await deleteUser(uuid);
-        if(data) {
-            getUsers(token!);
+        deleteUserMutateFn(uuid)
+    }
+
+    async function editUserByUuid(uuid: string) {
+        setUserSelect(oldState => oldState === uuid ? "": uuid);
+    }
+    
+    function handleCloseDrawer() {
+        if(userSelected !== "") {
+            setUserSelect("");
+        } else {
+            setDrawerState(false);
         }
     }
 
     useEffect(() => {
-        if(token) {
-            getUsers(token);
+        if(userSelected !== "") {
+            setDrawerState(true);
+        } else {
+            setDrawerState(false);
         }
-    }, [])
-    // const navigate = useNavigate();
-
-    // function logout() {
-    //     window.localStorage.removeItem('token');
-
-    //     navigate("/")
-    // }
+    }, [userSelected]);
 
     return(
-        <div className="flex flex-1 flex-col w-full h-screen bg-green-100">
+        <div className="flex flex-1 flex-col w-full h-auto bg-green-100">
             <Header />
             <Content>
-                <UserList 
-                    data={data} 
+                {users && <UserList 
+                    data={users} 
                     onDelete={deleteUserByUuid}
-                />
+                    onEdit={editUserByUuid}
+                    onCreateNew={() => setDrawerState(true)}
+                />}
             </Content>
             <Footer />
-            {/* <h1 className="font-bold text-4xl">
-                Bem vindo
-            </h1>
 
-            <button className="bg-red-600 flex items-center justify-center rounded text-white p-4" onClick={logout}>
-                <ArrowLeft size={24} />
-                Sair
-            </button> */}
+            <Drawer 
+                title={userSelected ? "Atualizar usuário" : "Cadastrar usuário"}
+                isOpen={drawerState}
+                onClose={handleCloseDrawer}
+            >
+                <UserForm
+                    userUuid={userSelected}
+                    onCancel={handleCloseDrawer}
+                />
+            </Drawer>
         </div>
     )
 }

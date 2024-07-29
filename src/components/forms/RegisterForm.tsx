@@ -9,7 +9,7 @@ import { ButtonGoogle } from '../ButtonGoogle';
 
 import { RegisterFormSchema, registerFormZodSchema } from '../../schemas/RegisterFormSchema';
 
-import { api } from '../../services/api';
+import { register as registerUser } from '../../services/auth.service';
 
 type Props = {
     setChangeTypeForm: Dispatch<SetStateAction<"login" | "register" | "forget" | "reset">>;
@@ -26,19 +26,20 @@ export function RegisterForm({ setChangeTypeForm }: Props) {
         resolver: zodResolver(registerFormZodSchema),
     });
 
-    async function onSubmit({ name, email, birthDate, password }: RegisterFormSchema) {
-        // console.log({ name, email, birthDate, password, passwordConfirm });
+    async function onSubmit(props: RegisterFormSchema) {
         setIsLoading(true);
         try {
-            const { data } = await api.post("/auth/register", {
-                name, 
-                email, 
-                birthDate, 
-                password
-            });
-            if(data) {
-                window.localStorage.setItem('token', data.access_token);
-                navigate("/application")
+            const data: CreateUserDto = {
+                name: props.name,
+                birthDate: props.birthDate,
+                email: props.email,
+                password: props.password
+            }
+
+            const response = await registerUser(data);
+            if(response) {
+                window.localStorage.setItem('token', response.access_token);
+                navigate("/users")
             }
             setIsLoading(false);
         } catch(error) {

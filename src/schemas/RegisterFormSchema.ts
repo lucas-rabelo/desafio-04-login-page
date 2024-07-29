@@ -6,6 +6,7 @@ export const registerFormZodSchema = z.object({
     email: z.string({ required_error: "Informe seu e-mail atual" })
             .email({ message: "Insira um e-mail válido" }),
     birthDate: z.string({ required_error: "Insira uma data" }),
+    role: z.string().nullable(),
     password: z.string({ required_error: "Senha incorreta" })
                .min(8, { message: "A senha tem que ter no mínimo 8 caracteres." })
                .max(32, { message: "A senha tem que ter no máximo 32 caracteres" })

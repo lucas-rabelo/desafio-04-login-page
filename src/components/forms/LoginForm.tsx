@@ -10,6 +10,7 @@ import { LoginFormSchema, loginFormZodSchema } from '../../schemas/LoginFormSche
 
 import { api } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
+import { signIn } from '../../services/auth.service';
 
 type Props = {
     setChangeTypeForm: Dispatch<SetStateAction<"login" | "register" | "forget" | "reset">>;
@@ -26,16 +27,11 @@ export function LoginForm({ setChangeTypeForm }: Props) {
     });
 
     async function onSubmit({ email, password }: LoginFormSchema) {
-        // console.log({ email, password, rememberMe });
         setIsLoading(true);
         try {
-            // console.log({ email, password });
-            const { data } = await api.post("/auth/login", {
-                email,
-                password
-            });
-            if(data) {
-                window.localStorage.setItem('token', data.access_token);
+            const response = await signIn(email, password);
+            if(response) {
+                window.localStorage.setItem('token', response.access_token);
                 navigate("/users")
             }
             setIsLoading(false);
