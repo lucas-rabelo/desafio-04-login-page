@@ -33,6 +33,7 @@ export function RegisterForm({ setChangeTypeForm }: Props) {
                 name: props.name,
                 birthDate: props.birthDate,
                 email: props.email,
+                role: null,
                 password: props.password
             }
 
